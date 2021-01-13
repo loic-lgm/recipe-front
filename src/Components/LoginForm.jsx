@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { apiErrors, apiFetch } from '../utils/api';
+import { Button } from '../ui/Button';
 
 function Alert ({message}) {
     return <div>
@@ -45,7 +46,7 @@ export function LoginForm ({onConnect}) {
          <input type="text" name="email" id="email" required/>
          <label htmlFor="password">Mot de passe</label>
          <input type="password" name="password" id="password" required/>
-         <button type="submit" disabled={loading}>Se connecter</button>
+         <Button type="submit" loading={loading}>Se Connecter</Button>
      </form>
 }
 

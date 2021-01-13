@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useIngredients } from '../hooks/ingredients';
+import { Ingredients } from './Ingredients';
 
 function NavBar ({currentPage, onClick }) {
     // définit une classe pour la page est active
@@ -11,7 +13,7 @@ function NavBar ({currentPage, onClick }) {
     }
 
     return <nav>
-        <a href="#">Nom du site</a>
+        <a href="#accueil">Nom du site</a>
         <ul>
             <li className={navClass('recettes')} onClick={() => onClick('recettes')}>
                 <a href="#recettes">Recettes</a>
@@ -27,8 +29,25 @@ export function Site () {
     // état qui permet de savoir sur quelle page on est
     const [page, setPage] = useState('ingredients')
 
+    const {
+        ingredients,
+        fetchIngredients,
+        deleteIngredient
+    } = useIngredients()
+
+    let content = null
+    if (page === 'ingredients') {
+        content = <Ingredients ingredients={ingredients} onDelete={deleteIngredient}/>
+    }
+
+    useEffect(function() {
+        if (page === 'ingredients') {
+            fetchIngredients()
+        }
+    }, [page])
+
     return <>
         <NavBar currentPage={page} onClick={setPage}/>
-        <p>{page}</p>
+        {content}
     </>
 }
