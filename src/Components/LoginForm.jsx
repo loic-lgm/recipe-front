@@ -21,7 +21,7 @@ export function LoginForm ({onConnect}) {
         const data = new FormData(e.target)
     
         // appel à l'api
-        const user = await apiFetch('login', {
+        const user = await apiFetch('/login', {
             method: 'POST',
             body: data,
         })
