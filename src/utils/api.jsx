@@ -1,7 +1,7 @@
 /**
  * Représente une erreur envoyée par l'API
  */
-export class apiErrors {
+export class ApiErrors {
     constructor(errors) {
         this.errors = errors
     }
@@ -31,7 +31,7 @@ export async function apiFetch (endpoint, options = {}) {
         return responseData
     } else {
         if (responseData.errors) {
-            throw new apiErrors(responseData.errors)
+            throw new ApiErrors(responseData.errors)
         }
     }
 

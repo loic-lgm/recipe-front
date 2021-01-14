@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { apiErrors, apiFetch } from '../utils/api';
+import { ApiErrors, apiFetch } from '../utils/api';
 import { Button } from '../ui/Button';
 
 function Alert ({message}) {
@@ -30,7 +30,7 @@ export function LoginForm ({onConnect}) {
             // si la réponse est OK, on passe les data
             onConnect(user)
         } catch (e) {
-            if (e instanceof apiErrors) {
+            if (e instanceof ApiErrors) {
                 setError(e.errors[0].message)
             } else {
                 console.error(e)

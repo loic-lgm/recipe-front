@@ -32,19 +32,26 @@ export function Site () {
     const {
         ingredients,
         fetchIngredients,
+        addIngredient,
+        updateIngredient,
         deleteIngredient
     } = useIngredients()
 
     let content = null
     if (page === 'ingredients') {
-        content = <Ingredients ingredients={ingredients} onDelete={deleteIngredient}/>
+        content = <Ingredients 
+            ingredients={ingredients} 
+            onDelete={deleteIngredient}
+            onUpdate={updateIngredient}
+            onCreate={addIngredient}
+        />
     }
 
     useEffect(function() {
         if (page === 'ingredients') {
             fetchIngredients()
         }
-    }, [page])
+    }, [page, fetchIngredients])
 
     return <>
         <NavBar currentPage={page} onClick={setPage}/>
