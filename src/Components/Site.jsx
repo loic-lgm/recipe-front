@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useIngredients } from '../hooks/ingredients';
+import { useRecipes } from '../hooks/recipes';
 import { Ingredients } from './Ingredients';
+import { RecipeDetail } from './RecipeDetail';
+import { Recipes } from './Recipes';
 
 function NavBar ({currentPage, onClick }) {
     // définit une classe pour la page est active
@@ -27,7 +30,7 @@ function NavBar ({currentPage, onClick }) {
 
 export function Site () {
     // état qui permet de savoir sur quelle page on est
-    const [page, setPage] = useState('ingredients')
+    const [page, setPage] = useState('recettes')
 
     const {
         ingredients,
@@ -37,6 +40,14 @@ export function Site () {
         deleteIngredient
     } = useIngredients()
 
+    const {
+        recipes,
+        recipe,
+        fetchRecipes,
+        fetchRecipe,
+        deselectRecipe
+    } = useRecipes()
+
     let content = null
     if (page === 'ingredients') {
         content = <Ingredients 
@@ -45,16 +56,24 @@ export function Site () {
             onUpdate={updateIngredient}
             onCreate={addIngredient}
         />
+    } else if (page === 'recettes') {
+        content = <Recipes
+            recipes={recipes}
+            onClick={fetchRecipe}
+        />
     }
 
     useEffect(function() {
         if (page === 'ingredients') {
             fetchIngredients()
+        } else if (page === 'recettes') {
+            fetchRecipes()
         }
-    }, [page, fetchIngredients])
+    }, [page, fetchIngredients, fetchRecipes])
 
     return <>
         <NavBar currentPage={page} onClick={setPage}/>
+        {recipe ? <RecipeDetail recipe={recipe} onClose={deselectRecipe}/> : null}
         {content}
     </>
 }
