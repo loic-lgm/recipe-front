@@ -5,7 +5,7 @@ import { Modal } from '../ui/Modal';
 
 export function RecipeDetail ({ recipe, onClose }) {
     return <Modal title={recipe.title} onClose={onClose}>
-            {recipe.content ? <RecipeDetails recipe={recipe}/> : <Loader/>}
+            {recipe.ingredients ? <RecipeDetails recipe={recipe}/> : <Loader/>}
     </Modal>
 }
 

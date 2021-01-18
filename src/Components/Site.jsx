@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useToggle } from '../hooks';
 import { useIngredients } from '../hooks/ingredients';
 import { useRecipes } from '../hooks/recipes';
+import { Button } from '../ui/Button';
+import { Modal } from '../ui/Modal';
+import { CreateRecipe } from './CreateRecipe';
 import { Ingredients } from './Ingredients';
 import { RecipeDetail } from './RecipeDetail';
 import { Recipes } from './Recipes';
 
-function NavBar ({currentPage, onClick }) {
+function NavBar ({currentPage, onClick, onButtonClick }) {
     // définit une classe pour la page est active
     const navClass = function (page) {
         let className = ''
@@ -25,12 +29,15 @@ function NavBar ({currentPage, onClick }) {
                 <a href="#ingredients">Ingrédients</a>
             </li>
         </ul>
+        <Button onClick={onButtonClick}>Ajouter</Button>
     </nav>
 }
 
 export function Site () {
     // état qui permet de savoir sur quelle page on est
     const [page, setPage] = useState('recettes')
+    // état qui permet de savoir si on affiche la modal addRecipe
+    const [add, toggleAdd] = useToggle(false)
 
     const {
         ingredients,
@@ -45,6 +52,7 @@ export function Site () {
         recipe,
         fetchRecipes,
         fetchRecipe,
+        createRecipe,
         deselectRecipe
     } = useRecipes()
 
@@ -64,16 +72,20 @@ export function Site () {
     }
 
     useEffect(function() {
-        if (page === 'ingredients') {
+        if (page === 'ingredients' || add) {
             fetchIngredients()
         } else if (page === 'recettes') {
             fetchRecipes()
-        }
-    }, [page, fetchIngredients, fetchRecipes])
+        } 
+    }, [page, fetchIngredients, fetchRecipes, add])
 
     return <>
-        <NavBar currentPage={page} onClick={setPage}/>
+        <NavBar currentPage={page} onClick={setPage} onButtonClick={toggleAdd}/>
         {recipe ? <RecipeDetail recipe={recipe} onClose={deselectRecipe}/> : null}
+        {add && <Modal title="Créer une recette" onClose={toggleAdd}>
+            <CreateRecipe ingredients={ingredients} onSubmit={createRecipe}/>
+        </Modal>}
         {content}
+
     </>
 }

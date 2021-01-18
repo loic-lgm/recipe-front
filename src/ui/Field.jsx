@@ -5,7 +5,9 @@ export function Field ({name, children, type = 'text', error, ...props}) {
 
     return <>
         {children && <label htmlFor={name}>{children}</label>}
-        <input type={type} name={name} id={name} className={error ? 'isInvalid' : ''} {...props}/>
+        {type === 'textarea' ?
+            <textarea name={name} id={name} className={error ? 'isInvalid' : ''} {...props}/> 
+            : <input type={type} name={name} id={name} className={error ? 'isInvalid' : ''} {...props}/>}
         {error && <div>{error}</div>}
     </>
     
