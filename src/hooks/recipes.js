@@ -15,7 +15,9 @@ function reducer (state, action) {
         case 'ADD_RECIPE':
             return {...state, recipes: [action.payload, ...state.recipes]}
         case 'DESELECT_RECIPE':
-            return {...state, recipeId: null}       
+            return { ...state, recipeId: null }    
+        case 'DELETE_RECIPE': 
+            return { ...state, recipes: state.recipes.filter(i => i !== action.payload) }      
         default:
             console.log(`Sorry, we are out of ${action.type}.`)
             throw new Error('Action inconnue' + action.type)     
@@ -56,6 +58,19 @@ export function useRecipes () {
                 body: data
             })
             dispatch({type: 'ADD_RECIPE', payload: recipe})
+        }, []),
+        updateRecipe: useCallback(async function(recipe, data) {
+            recipe = await apiFetch('/recipes/' + recipe.id , {
+                method: 'PUT',
+                body: data
+            })
+            dispatch({type: 'SET_RECIPE', payload: recipe})
+        }, []),
+        deleteRecipe: useCallback(async function(recipe) {
+            await apiFetch('/recipes/' + recipe.id, {
+                method: 'DELETE'
+            })
+            dispatch({type: 'DELETE_RECIPE', payload: recipe})
         }, []),
         deselectRecipe: function () {
             dispatch({type: 'DESELECT_RECIPE'})

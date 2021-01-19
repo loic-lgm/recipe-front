@@ -53,6 +53,8 @@ export function Site () {
         fetchRecipes,
         fetchRecipe,
         createRecipe,
+        updateRecipe,
+        deleteRecipe,
         deselectRecipe
     } = useRecipes()
 
@@ -81,7 +83,14 @@ export function Site () {
 
     return <>
         <NavBar currentPage={page} onClick={setPage} onButtonClick={toggleAdd}/>
-        {recipe ? <RecipeDetail recipe={recipe} onClose={deselectRecipe}/> : null}
+        {recipe ? <RecipeDetail 
+            recipe={recipe} 
+            onClose={deselectRecipe} 
+            onEdit={fetchIngredients} 
+            ingredients={ingredients}
+            onUpdate={updateRecipe}
+            onDelete={deleteRecipe}
+        /> : null}
         {add && <Modal title="Créer une recette" onClose={toggleAdd}>
             <CreateRecipe ingredients={ingredients} onSubmit={createRecipe}/>
         </Modal>}
